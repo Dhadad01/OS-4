@@ -1,0 +1,3 @@
+[submodule "tests"]
+	path = tests
+	url = https://github.cs.huji.ac.il/danielkerbel/tests_os_ex4
