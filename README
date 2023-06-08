@@ -1,0 +1,15 @@
+david.hadad,roeey
+David Hadad - 314618448
+Eyal Royee - 318307915
+
+Submitted files:
+1) Makefile               - the recipe for building the MapReduceFramework library.
+3) pdebug.hpp             - a header for debug prints.
+4) pdebug.cpp             - implementation for pdebug.hpp.
+9) README                 - a brief overview of the submitted assignment.
+
+
+IMPORTANT LINKS:
+sizes of translation tables - https://moodle2.cs.huji.ac.il/nu21/mod/forum/discuss.php?d=89923
+some tests - https://github.cs.huji.ac.il/danielkerbel/tests_os_ex4
+
