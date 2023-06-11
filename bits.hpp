@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 
-uint64_t extract_bits(uint64_t number, uint64_t start, uint64_t end);
+uint64_t
+extract_bits(uint64_t number, uint64_t start, uint64_t end);
 
-#endif //EX4_BITS_H
+#endif // EX4_BITS_H

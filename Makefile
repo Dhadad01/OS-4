@@ -1,9 +1,9 @@
-AUXILIARY_SOURCES := worker.cpp job.cpp pdebug.cpp
+AUXILIARY_SOURCES := bits.cpp pdebug.cpp
 AUXILIARY_HEADERS := ${AUXILIARY_SOURCES:.cpp=.hpp}
-SOURCES := MapReduceFramework.cpp $(AUXILIARY_SOURCES)
-LIBRARY := libMapReduceFramework.a
+SOURCES := VirtualMemory.cpp $(AUXILIARY_SOURCES) PhysicalMemory.cpp
+LIBRARY := libVirutalMemory.a
 OBJECTS := ${SOURCES:.cpp=.o}
-TARGET_SOURCES := test1.cpp
+TARGET_SOURCES := SimpleTest.cpp
 TARGET_OBJECTS := ${TARGET_SOURCES:.cpp=.o}
 TARGET := target
 
@@ -13,8 +13,8 @@ RANLIB := ranlib
 CXXFLAGS := -Werror -Wextra -Wall -std=c++11 -pedantic
 LDFLAGS := -pthread
 CLANG_FORMAT_FLAGS := --style=file:.clang-format -i
-FILES_TO_SUBMIT := Makefile README $(AUXILIARY_SOURCES) $(AUXILIARY_HEADERS) MapReduceFramework.cpp
-SUBMISION_NAME := ex3
+FILES_TO_SUBMIT := Makefile README $(AUXILIARY_SOURCES) $(AUXILIARY_HEADERS) VirtualMemory.cpp
+SUBMISION_NAME := ex4
 SUBMISION_FILE := ${SUBMISION_NAME:=.tar}
 
 .PHONY: all clean format tar

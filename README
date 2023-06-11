@@ -3,7 +3,8 @@ David Hadad - 314618448
 Eyal Royee - 318307915
 
 Submitted files:
-1) Makefile               - the recipe for building the MapReduceFramework library.
+1) Makefile               - the recipe for building the VirtualMemory library.
+2) VirtualMemory.cpp      - implementation of the VirtualMemory library.
 3) pdebug.hpp             - a header for debug prints.
 4) pdebug.cpp             - implementation for pdebug.hpp.
 9) README                 - a brief overview of the submitted assignment.
