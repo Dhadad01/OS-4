@@ -7,10 +7,7 @@ Submitted files:
 2) VirtualMemory.cpp      - implementation of the VirtualMemory library.
 3) pdebug.hpp             - a header for debug prints.
 4) pdebug.cpp             - implementation for pdebug.hpp.
-9) README                 - a brief overview of the submitted assignment.
-
-
-IMPORTANT LINKS:
-sizes of translation tables - https://moodle2.cs.huji.ac.il/nu21/mod/forum/discuss.php?d=89923
-some tests - https://github.cs.huji.ac.il/danielkerbel/tests_os_ex4
+5) bits.hpp               - a header for extracting bits from a given number.
+6) bits.cpp               - implementation for bits.hpp.
+7) README                 - a brief overview of the submitted assignment.
 

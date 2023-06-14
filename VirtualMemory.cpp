@@ -8,6 +8,7 @@
 #include "PhysicalMemory.h"
 #include "VirtualMemory.h"
 #include "bits.hpp"
+#include "pdebug.hpp"
 
 #ifndef MAX
 #define MAX(a, b) ((a > b) ? a : b)
@@ -98,7 +99,7 @@ VMread(uint64_t virtualAddress, word_t* value)
     return 0;
   }
   uint64_t physical_addr = translate(virtualAddress);
-  printf("%s: virtual address %lu is mapped to physical address is: %lu\n",
+  pdebug("%s: virtual address %lu is mapped to physical address is: %lu\n",
          __FUNCTION__,
          virtualAddress,
          physical_addr);
@@ -124,11 +125,11 @@ VMwrite(uint64_t virtualAddress, word_t value)
   }
 
   uint64_t physical_addr = translate(virtualAddress);
-  printf("%s: virtual address %lu is mapped to physical address is: %lu\n",
+  pdebug("%s: virtual address %lu is mapped to physical address is: %lu\n",
          __FUNCTION__,
          virtualAddress,
          physical_addr);
-  printf("%d was written\n", value);
+  pdebug("%d was written\n", value);
   if (0 == physical_addr) {
     /*
      * error.
@@ -139,32 +140,6 @@ VMwrite(uint64_t virtualAddress, word_t value)
   PMwrite(physical_addr, value);
   return 1;
 }
-
-//**************************************************
-#include <iostream>
-#include <vector>
-static void
-print_tree(uint64_t frame, int depth)
-{
-  std::vector<word_t> values;
-  word_t val = 0;
-  std::cout << "******FRAME " << frame
-            << " is leaf: " << ((depth == TABLES_DEPTH) ? "yes" : "no")
-            << "******\n";
-  for (int i = 0; i < PAGE_SIZE; ++i) {
-    PMread((PAGE_SIZE * frame) + i, &val);
-    //    std::cout << "index: " << i << " value: " << val << " ";
-    std::cout << " " << val;
-    values.push_back(val);
-  }
-  std::cout << std::endl;
-  for (const auto& value : values) {
-    if (value != 0 && depth != TABLES_DEPTH) {
-      print_tree(value, depth + 1);
-    }
-  }
-}
-//**************************************************
 
 uint64_t
 translate(uint64_t virtual_addr)
@@ -249,9 +224,6 @@ translate(uint64_t virtual_addr)
       addr1 = f1;
     }
     addr = addr1;
-    //    printf("DEBUG IN TRANSLATE\n");
-    //    print_tree(0, 0);
-    //    printf("\n\n\n\n\n");
   }
 
   /* addr is the frame, indices[0] is the offset. */
