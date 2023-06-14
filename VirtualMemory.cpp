@@ -78,7 +78,10 @@ cyclic_distance(uint64_t swapped_in, uint64_t page_num);
 void
 VMinitialize()
 {
-  for (uint64_t i = 0; i < ROOT_TABLE_SIZE; i++) {
+  //  for (uint64_t i = 0; i < ROOT_TABLE_SIZE; i++) {
+  //    PMwrite(i, 0);
+  //  }
+  for (uint64_t i = 0; i < PAGE_SIZE; i++) {
     PMwrite(i, 0);
   }
 }
@@ -88,11 +91,17 @@ VMinitialize()
 int
 VMread(uint64_t virtualAddress, word_t* value)
 {
+  if (virtualAddress >= VIRTUAL_MEMORY_SIZE) {
+    /*
+     * out of bounds.
+     */
+    return 0;
+  }
   uint64_t physical_addr = translate(virtualAddress);
   printf("%s: virtual address %lu is mapped to physical address is: %lu\n",
-           __FUNCTION__,
-           virtualAddress,
-           physical_addr);
+         __FUNCTION__,
+         virtualAddress,
+         physical_addr);
   if (0 == physical_addr) {
     /*
      * error.
@@ -107,12 +116,19 @@ VMread(uint64_t virtualAddress, word_t* value)
 int
 VMwrite(uint64_t virtualAddress, word_t value)
 {
+  if (virtualAddress >= VIRTUAL_MEMORY_SIZE) {
+    /*
+     * out of bounds.
+     */
+    return 0;
+  }
+
   uint64_t physical_addr = translate(virtualAddress);
   printf("%s: virtual address %lu is mapped to physical address is: %lu\n",
          __FUNCTION__,
          virtualAddress,
          physical_addr);
-  printf("%d was written\n",value);
+  printf("%d was written\n", value);
   if (0 == physical_addr) {
     /*
      * error.
@@ -233,9 +249,9 @@ translate(uint64_t virtual_addr)
       addr1 = f1;
     }
     addr = addr1;
-//    printf("DEBUG IN TRANSLATE\n");
-//    print_tree(0, 0);
-//    printf("\n\n\n\n\n");
+    //    printf("DEBUG IN TRANSLATE\n");
+    //    print_tree(0, 0);
+    //    printf("\n\n\n\n\n");
   }
 
   /* addr is the frame, indices[0] is the offset. */
