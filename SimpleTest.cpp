@@ -16,7 +16,8 @@ print_tree(uint64_t frame, int depth)
             << "******\n";
   for (int i = 0; i < PAGE_SIZE; ++i) {
     PMread((PAGE_SIZE * frame) + i, &val);
-    std::cout << "index: " << i << " value: " << val << " ";
+    //    std::cout << "index: " << i << " value: " << val << " ";
+    std::cout << " " << val;
     values.push_back(val);
   }
   std::cout << std::endl;

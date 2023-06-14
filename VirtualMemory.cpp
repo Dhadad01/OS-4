@@ -23,6 +23,7 @@
 
 #define ROOT_TABLE_SIZE                                                        \
   (1 << (VIRTUAL_ADDRESS_WIDTH - (TABLES_DEPTH * OFFSET_WIDTH)))
+#define ROOT_TABLE_FRAME_INDEX 0
 
 enum evict_frame_case
 {
@@ -129,7 +130,8 @@ print_tree(uint64_t frame, int depth)
             << "******\n";
   for (int i = 0; i < PAGE_SIZE; ++i) {
     PMread((PAGE_SIZE * frame) + i, &val);
-    std::cout << "index: " << i << " value: " << val << " ";
+    //    std::cout << "index: " << i << " value: " << val << " ";
+    std::cout << " " << val;
     values.push_back(val);
   }
   std::cout << std::endl;
@@ -178,20 +180,26 @@ translate(uint64_t virtual_addr)
       uint64_t frame = 0;
       enum evict_frame_case evict_frame = UNDEFINED;
       uint64_t page_num = virtual_addr >> OFFSET_WIDTH;
-      frame = traverse(max_frame_idx,
-                       evict_frame,
-                       max_cyclic_distance,
-                       max_cyclic_distance_page_num,
-                       max_cyclic_distance_frame_num,
-                       max_cyclic_distance_frame_padre,
-                       0,
-                       addr,
-                       depth,
-                       page_num,
-                       0,
-                       addr);
+      frame = traverse(
+        max_frame_idx,
+        evict_frame,
+        max_cyclic_distance,
+        max_cyclic_distance_page_num,
+        max_cyclic_distance_frame_num,
+        max_cyclic_distance_frame_padre,
+        0,
+        //                       addr,   // replaced with the root - which is 0
+        ROOT_TABLE_FRAME_INDEX,
+        //                       depth,  // replaced with the root's depth -
+        //                       which is 0
+        0,
+        page_num,
+        0,
+        addr);
       if (evict_frame == CASE_1) {
         f1 = frame;
+        // unlink empty table from the previous table.
+        PMwrite(max_cyclic_distance_frame_padre, 0);
       } else {
         if (max_frame_idx + 1 < NUM_FRAMES) {
           evict_frame = CASE_2;
@@ -217,9 +225,9 @@ translate(uint64_t virtual_addr)
       addr1 = f1;
     }
     addr = addr1;
-    //      printf("DEBUG IN TRANSLATE\n");
-    //      print_tree(0, 0);
-    //      printf("\n\n\n\n\n");
+    printf("DEBUG IN TRANSLATE\n");
+    print_tree(0, 0);
+    printf("\n\n\n\n\n");
   }
 
   /* addr is the frame, indices[0] is the offset. */
@@ -291,6 +299,12 @@ traverse(uint64_t& max_frame_idx,
      * case 1 in the pdf.
      */
     evict_frame = CASE_1;
+    /*
+     * abuse of notation...
+     * use max_cyclic_distance_frame_padre just for passing back to the caller
+     * from which table entry to unlink the current frame.
+     */
+    max_cyclic_distance_frame_padre = frame_padre;
     return frame_index;
   }
 
