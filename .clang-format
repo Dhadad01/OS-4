@@ -2,3 +2,4 @@ BasedOnStyle: Mozilla
 ColumnLimit: 80
 # Set EOL to LF unconditionally
 LineEnding: LF
+InsertNewlineAtEOF: True
