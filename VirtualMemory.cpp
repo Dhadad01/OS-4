@@ -89,7 +89,10 @@ int
 VMread(uint64_t virtualAddress, word_t* value)
 {
   uint64_t physical_addr = translate(virtualAddress);
-  printf("%s: physical address is: %lu\n", __FUNCTION__, physical_addr);
+  printf("%s: virtual address %lu is mapped to physical address is: %lu\n",
+           __FUNCTION__,
+           virtualAddress,
+           physical_addr);
   if (0 == physical_addr) {
     /*
      * error.
@@ -105,7 +108,11 @@ int
 VMwrite(uint64_t virtualAddress, word_t value)
 {
   uint64_t physical_addr = translate(virtualAddress);
-  printf("%s: physical address is: %lu\n", __FUNCTION__, physical_addr);
+  printf("%s: virtual address %lu is mapped to physical address is: %lu\n",
+         __FUNCTION__,
+         virtualAddress,
+         physical_addr);
+  printf("%d was written\n",value);
   if (0 == physical_addr) {
     /*
      * error.
@@ -215,19 +222,20 @@ translate(uint64_t virtual_addr)
         }
       }
 
-      if (depth != TABLES_DEPTH) {
+      if (depth + 1 != TABLES_DEPTH) {
         clear_table(f1);
         PMwrite(addr * PAGE_SIZE + indices[TABLES_DEPTH - depth], f1);
       } else {
         PMrestore(f1, page_num);
+        PMwrite(addr * PAGE_SIZE + indices[TABLES_DEPTH - depth], f1);
       }
 
       addr1 = f1;
     }
     addr = addr1;
-    printf("DEBUG IN TRANSLATE\n");
-    print_tree(0, 0);
-    printf("\n\n\n\n\n");
+//    printf("DEBUG IN TRANSLATE\n");
+//    print_tree(0, 0);
+//    printf("\n\n\n\n\n");
   }
 
   /* addr is the frame, indices[0] is the offset. */
